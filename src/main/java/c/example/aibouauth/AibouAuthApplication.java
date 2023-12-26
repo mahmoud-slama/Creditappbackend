@@ -20,31 +20,31 @@ public class AibouAuthApplication {
 		SpringApplication.run(AibouAuthApplication.class, args);
 
 	}
-//	@Bean
-//	public CommandLineRunner commandLineRunner(
-//			AuthenticationService service
-//	) {
-//		return args -> {
-//			var admin = RegisterRequest.builder()
-//					.firstname("Admin")
-//					.lastname("Admin")
-//					.email("admin@mail.com")
-//					.password("password")
-//					.role(ADMIN)
-//					.build();
-//			System.out.println("Admin token: " + service.register(admin).getAccessToken());
-//
-//			var manager = RegisterRequest.builder()
-//					.firstname("Admin")
-//					.lastname("Admin")
-//					.email("manager@mail.com")
-//					.password("password")
-//					.role(MANAGER)
-//					.build();
-//			System.out.println("Manager token: " + service.register(manager).getAccessToken());
-//
-//		};
-//
-//	}
+	@Bean
+	public CommandLineRunner commandLineRunner(
+			AuthenticationService service
+	) {
+		return args -> {
+			var admin = RegisterRequest.builder()
+					.firstName("admin")
+					.lastName("admin")
+					.email("admin@mail.com")
+					.password("password")
+					.role(ADMIN)
+					.build();
+			System.out.println("Admin token: " + service.register(admin).getAccessToken());
+
+			var manager = RegisterRequest.builder()
+					.firstName("manager")
+					.lastName("manager")
+					.email("manager@mail.com")
+					.password("password")
+					.role(MANAGER)
+					.build();
+			System.out.println("Manager token: " + service.register(manager).getAccessToken());
+
+		};
+
+	}
 
 }
