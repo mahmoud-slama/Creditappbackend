@@ -6,13 +6,13 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/authmahmoud
+    url: jdbc:mysql://localhost:3306/mahmoud
     username: root
-    password: 0808
+    password: SLAMA250@@mahmoud##
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop # Utilisez "update" au lieu de "create-drop"
+      ddl-auto: update # Utilisez "update" au lieu de "create-drop"
 
     show-sql: false
     properties:
