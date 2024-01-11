@@ -1,23 +1,20 @@
 package c.example.aibouauth.purchase;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import c.example.aibouauth.user.User;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Date;
 
 
 @Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "purchases")
+@Table(name = "purchase")
 public class Purchase {
     @Id
     @GeneratedValue
@@ -25,5 +22,14 @@ public class Purchase {
     private Long total;
     private Date date;
     private Integer quantity;
+    @Getter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
 }

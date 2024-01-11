@@ -1,16 +1,15 @@
 package c.example.aibouauth.user;
 
 
+import c.example.aibouauth.purchase.Purchase;
 import c.example.aibouauth.token.Token;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,6 +35,10 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private  List<Token>tokens;
+
+    @Getter
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Purchase> purchases = new ArrayList<>();
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role .getAuthorities();
@@ -69,5 +72,20 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    public void setPurchases(List<Purchase> purchases) {
+        this.purchases = purchases;
+    }
+
+    public void addPurchase(Purchase purchase) {
+        purchases.add(purchase);
+        purchase.setUser(this);
+    }
+
+    public void removePurchase(Purchase purchase) {
+        purchases.remove(purchase);
+        purchase.setUser(null);
     }
 }
