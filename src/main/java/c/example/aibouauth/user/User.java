@@ -32,6 +32,8 @@ public class User implements UserDetails {
     private String phone;
     @Enumerated(EnumType.STRING)
     private  Role  role;
+    @Getter
+    private Double totalAmount = 0.0;
 
     @OneToMany(mappedBy = "user")
     private  List<Token>tokens;
@@ -87,5 +89,9 @@ public class User implements UserDetails {
     public void removePurchase(Purchase purchase) {
         purchases.remove(purchase);
         purchase.setUser(null);
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 }

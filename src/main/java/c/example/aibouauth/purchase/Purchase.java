@@ -19,9 +19,11 @@ public class Purchase {
     @Id
     @GeneratedValue
     private Integer id;
-    private Long total;
+    private String name;
     private Date date;
     private Integer quantity;
+    @Getter
+    private Double amount;
     @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

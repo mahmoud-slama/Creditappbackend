@@ -25,3 +25,5 @@ public class Product {
     private String ref;
     private Integer quantity;
 }
+
+

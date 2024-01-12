@@ -55,5 +55,10 @@ public class UsersService {
     public List<User> getAllUsers() {
         return repository.findAll();
     }
+
+    public User getUserById(Integer id) {
+        return repository.findUserById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }
 

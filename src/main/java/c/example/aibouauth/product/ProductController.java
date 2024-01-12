@@ -14,6 +14,8 @@ public class ProductController {
     @Autowired
     private ProductRepository repository;
 
+
+
     @PostMapping("/product")
 
     Product newProduct(@RequestBody Product newProduct){
