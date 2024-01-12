@@ -3,8 +3,13 @@ package c.example.aibouauth.product;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -36,7 +41,7 @@ public class ProductController {
                     product.setLabel(newProduct.getLabel());
                     product.setPrice(newProduct.getPrice());
                     product.setQuantity(newProduct.getQuantity());
-               return  repository.save(product);
+                    return  repository.save(product);
                 }).orElseThrow(()-> new ProductNotFoundException(id));
     }
     @DeleteMapping("Product/{id}")
@@ -47,4 +52,5 @@ public class ProductController {
         repository.deleteById(id);
         return "Product with id "+id+ "has been deleted success";
     }
+ 
 }

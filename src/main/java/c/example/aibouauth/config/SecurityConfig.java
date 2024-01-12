@@ -4,6 +4,7 @@ package c.example.aibouauth.config;
 import c.example.aibouauth.user.User;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
