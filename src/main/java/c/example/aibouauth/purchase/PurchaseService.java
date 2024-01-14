@@ -1,56 +1,61 @@
 package c.example.aibouauth.purchase;
 
-
+import c.example.aibouauth.product.Product;
 import c.example.aibouauth.product.ProductRepository;
 import c.example.aibouauth.user.User;
 import c.example.aibouauth.user.UserRepository;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+
+
+import java.time.LocalDate;
+
+
+
+
+
 @Service
-@RequiredArgsConstructor
 public class PurchaseService {
+
     @Autowired
-    private PurchaseRepository purchaseRepository;
+    private ProductRepository productRepository;
 
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
-    private ProductRepository productRepository;
+    private PurchaseRepository purchaseRepository;
 
-    // Method to get all purchases
-    public List<Purchase> getAllPurchases() {
-        return purchaseRepository.findAll();
+    public Purchase createPurchase(String productName, Integer quantity, Integer userId) {
+        Product product = productRepository.findByName(productName)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        User user = userRepository.findUserById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+
+        checkAndReduceProductStock(product, quantity);
+
+        double amount = product.getPrice() * quantity;
+        user.setMontant(user.getMontant() + amount);
+        userRepository.save(user);
+
+        Purchase purchase = new Purchase();
+        purchase.setProduct(product);
+        purchase.setUser(user);
+        purchase.setAmount(amount);
+        purchase.setDate(purchase.getDate() != null ? purchase.getDate() : LocalDate.now());
+
+        return purchaseRepository.save(purchase);
     }
 
-    @Transactional
-    public User addPurchasesToUser(List<Purchase> purchases, Integer userId) {
-        User user = userRepository.findById(userId.IntegerValue())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        double totalAmount = 0.0;
-
-        for (Purchase purchase : purchases) {
-            // Fetch product price based on the product name
-            String productName = purchase.getName();
-            double productPrice = productRepository.findByName(productName)
-                    .map(Product::getPrice)
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
-
-            purchase.setAmount(productPrice);
-            purchase.setUser(user);
-            purchaseRepository.save(purchase);
-
-            totalAmount += productPrice;
+    private void checkAndReduceProductStock(Product product, int purchaseQuantity) {
+        if (product.getQuantity() < purchaseQuantity) {
+            throw new RuntimeException("Insufficient stock available");
         }
 
-        user.setTotalAmount(user.getTotalAmount() + totalAmount); // Update user's total amount
-        userRepository.save(user); // Save the user
-
-        return user;
+        product.setQuantity(product.getQuantity() - purchaseQuantity);
+        productRepository.save(product);
     }
-
-
 }

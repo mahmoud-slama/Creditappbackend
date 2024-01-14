@@ -38,18 +38,11 @@ public class UsersService {
         repository.save(user);
     }
 
-    @Transactional
-    public User addPurchaseToUser(Integer user_id, Purchase purchase) {
-        User user = repository.findById(user_id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        purchase.setUser(user);
-        purchaseRepository.save(purchase);
-        return user;
-    }
+
 
     // Method to get all purchases for a user
     public List<Purchase> getAllPurchasesByUser(Integer userId) {
-        return purchaseRepository.findAllByUserId(userId);
+        return purchaseRepository.findAllByUser_Id(userId);
     }
 
     public List<User> getAllUsers() {

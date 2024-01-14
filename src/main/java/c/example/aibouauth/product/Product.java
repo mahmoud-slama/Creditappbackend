@@ -1,13 +1,13 @@
 package c.example.aibouauth.product;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import c.example.aibouauth.purchase.Purchase;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -19,11 +19,16 @@ public class Product {
 
     @Id
     @GeneratedValue
-    private Integer id;
-    private String label;
-    private Integer price;
+    private Integer product_id;
+    private String name;
+    private double price;
     private String ref;
     private Integer quantity;
+    @OneToMany(mappedBy = "product")
+    private List<Purchase> purchases;
+
+
+
 }
 
 

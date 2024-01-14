@@ -33,14 +33,15 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private  Role  role;
     @Getter
-    private Double totalAmount = 0.0;
+    private Double montant = 0.0;
 
     @OneToMany(mappedBy = "user")
     private  List<Token>tokens;
 
     @Getter
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Purchase> purchases = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<Purchase> purchases;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return role .getAuthorities();
@@ -91,7 +92,9 @@ public class User implements UserDetails {
         purchase.setUser(null);
     }
 
-    public void setTotalAmount(Double totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setMontant(Double montant) {
+        this.montant = montant;
     }
+
+
 }

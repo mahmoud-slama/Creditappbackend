@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired
@@ -35,7 +36,7 @@ public class ProductController {
         return repository.findById(id)
                 .map(product -> {
                     product.setRef(newProduct.getRef());
-                    product.setLabel(newProduct.getLabel());
+                    product.setName(newProduct.getName());
                     product.setPrice(newProduct.getPrice());
                     product.setQuantity(newProduct.getQuantity());
                return  repository.save(product);
