@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -20,18 +21,18 @@ public class Purchase {
     @Id
     @GeneratedValue
     private Integer id;
-    private String productName;
-    private LocalDate date;
-    private Integer quantity;
+    private int quantity;
     @Getter
     private Double amount;
     @Getter
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
+    private LocalDateTime date;
 
 
     public void setUser(User user) {

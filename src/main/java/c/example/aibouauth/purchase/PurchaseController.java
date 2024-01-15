@@ -6,69 +6,61 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/purchases")
 public class PurchaseController {
 
-    @Autowired
-    private PurchaseRepository purchaseRepository;
+    private final Logger log = LoggerFactory.getLogger(PurchaseController.class);
 
     @Autowired
     private PurchaseService purchaseService;
 
-    @GetMapping("/purchases")
-    public ResponseEntity<List<Purchase>> getAllPurchases(@RequestParam(required = false) String productName) {
-        try {
-            List<Purchase> purchases = new ArrayList<>();
+    @GetMapping
+    public List<Purchase> getAllPurchases() {
+        log.info("Getting all purchases");
+        return purchaseService.getAllPurchases();
+    }
 
-            if (productName == null)
-                purchases.addAll(purchaseRepository.findAll());
-            else
-                purchases.addAll(purchaseRepository.findByProductName(productName));
+    @GetMapping("/{id}")
+    public ResponseEntity<Purchase> getPurchaseById(@PathVariable Integer id) {
+        log.info("Getting purchase by ID: {}", id);
+        Optional<Purchase> purchase = purchaseService.getPurchaseById(id);
+        return purchase.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
 
-            if (purchases.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
+    @PostMapping
+    public ResponseEntity<Purchase> createPurchase(@RequestBody Purchase purchase) {
+        log.info("Creating a new purchase: {}", purchase);
+        Purchase createdPurchase = purchaseService.createPurchase(purchase);
+        log.info("Purchase created: {}", createdPurchase);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdPurchase);
+    }
 
-            return new ResponseEntity<>(purchases, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    @PutMapping("/{id}")
+    public ResponseEntity<Purchase> updatePurchase(@PathVariable Integer id, @RequestBody Purchase updatedPurchase) {
+        log.info("Updating purchase with ID {}: {}", id, updatedPurchase);
+        Purchase purchase = purchaseService.updatePurchase(id, updatedPurchase);
+        if (purchase != null) {
+            log.info("Purchase updated: {}", purchase);
+            return ResponseEntity.ok(purchase);
+        } else {
+            log.info("Purchase with ID {} not found", id);
+            return ResponseEntity.notFound().build();
         }
     }
 
-    @GetMapping("/purchases/{purchaseId}")
-    public ResponseEntity<Purchase> getPurchaseByPurchaseId(@PathVariable int purchaseId) {
-        Optional<Purchase> purchaseData = purchaseRepository.findById(purchaseId);
-        return purchaseData.map(purchase -> new ResponseEntity<>(purchase, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @DeleteMapping("/purchases/{id}")
-    public ResponseEntity<HttpStatus> deletePurchase(@PathVariable int id) {
-        try {
-            purchaseRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/purchases")
-    public ResponseEntity<Purchase> createPurchase(
-            @RequestParam String productName,
-            @RequestParam Integer quantity,
-            @RequestParam Integer userId) {
-
-        try {
-            Purchase createdPurchase = purchaseService.createPurchase(productName, quantity, userId);
-            return new ResponseEntity<>(createdPurchase, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePurchase(@PathVariable Integer id) {
+        log.info("Deleting purchase with ID: {}", id);
+        purchaseService.deletePurchase(id);
+        return ResponseEntity.noContent().build();
     }
 }
