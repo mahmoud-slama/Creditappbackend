@@ -1,15 +1,12 @@
 package c.example.aibouauth.user;
 
-import c.example.aibouauth.purchase.Purchase;
-import c.example.aibouauth.purchase.PurchaseRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.security.Principal;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +36,23 @@ public class UsersService {
 
 
 
+
+
     public User getUserById(Integer id) {
-        return repository.findUserById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return repository.findById(id).orElse(null);
     }
+
+    public void updateMontant(User user, BigDecimal amount) {
+        BigDecimal currentMontant = user.getMontant();
+
+        if (currentMontant == null) {
+            currentMontant = BigDecimal.ZERO;
+        }
+
+        user.setMontant(currentMontant.add(amount));
+        repository.save(user);
+    }
+
+
 }
 

@@ -25,7 +25,8 @@ public enum Role {
                     MANAGER_READ,
                     MANAGER_UPDATE,
                     MANAGER_DELETE,
-                    MANAGER_CREATE
+                    MANAGER_CREATE,
+                    ADMIN_MODIFY_MONTANT
             )
     ),
 

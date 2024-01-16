@@ -40,17 +40,20 @@ public class PurchaseController {
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<Object> createPurchaseByAdmin(@RequestBody Purchase purchase) {
+    public ResponseEntity<Object> createPurchase(@RequestBody PurchaseRequest purchaseRequest) {
         try {
-            Purchase savedPurchase = purchaseService.savePurchaseByAdmin(purchase);
+            User user = userService.getUserById(purchaseRequest.getUserId());
+
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with ID: " + purchaseRequest.getUserId());
+            }
+
+            Purchase savedPurchase = purchaseService.createPurchase(purchaseRequest.getName(), purchaseRequest.getQuantity(), user);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
         } catch (ProductNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with name: " + purchase.getPurchaseName());
-        } catch (PurchaseSaveException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving the purchase to the database");
-        } catch (Exception e) {
-            // Handle other exceptions
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with name: " + purchaseRequest.getName());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing the purchase: " + e.getMessage());
         }
     }
 }

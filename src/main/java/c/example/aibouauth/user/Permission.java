@@ -14,6 +14,8 @@ public enum Permission {
 
     ADMIN_DELETE("admin:delete"),
 
+    ADMIN_MODIFY_MONTANT("admin:modify_montant"),
+
 
     MANAGER_READ("  MANAGER:read"),
     MANAGER_UPDATE("  MANAGER:update"),

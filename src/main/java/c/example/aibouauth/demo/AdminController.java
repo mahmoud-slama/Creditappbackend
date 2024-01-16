@@ -1,5 +1,6 @@
 package c.example.aibouauth.demo;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,10 +27,16 @@ public class AdminController {
     }
     @DeleteMapping
     @PreAuthorize("hasAuthority('admin:delete')")
-
     public String delete() {
         return "DELETE:: admin controller";
     }
+
+    @PostMapping("/api/purchases/admin")
+    @PreAuthorize("hasAuthority('ADMIN_MODIFY_MONTANT')")
+    public String adminModifyMontant() {
+        return "POST:: admin controller for modifying montant";
+    }
+
 
 
 }
