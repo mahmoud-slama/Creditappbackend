@@ -24,17 +24,7 @@ public class UserController {
         return  ResponseEntity.ok().build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = service.getAllUsers();
-        return ResponseEntity.ok(users);
-    }
 
-    // New endpoint to add a purchase to a user
-    @PostMapping("/{user_id}/purchases")
-    public ResponseEntity<User> addPurchaseToUser(@PathVariable Integer user_id, @RequestBody Purchase purchase) {
-        User updatedUser = service.addPurchaseToUser(user_id, purchase);
-        return ResponseEntity.ok(updatedUser);
-    }
+
 
 }

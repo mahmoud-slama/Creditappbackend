@@ -9,11 +9,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    @Autowired
-    private ProductRepository productRepository;
 
-    public Optional<Double> getPriceOfProduct(String name) {
-        return productRepository.findByName(name)
-                .map(Product::getPrice);
-    }
+
 }

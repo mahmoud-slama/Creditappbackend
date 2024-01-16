@@ -1,66 +1,56 @@
 package c.example.aibouauth.purchase;
 
 
+import c.example.aibouauth.product.ProductNotFoundException;
+import c.example.aibouauth.user.User;
+import c.example.aibouauth.user.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/purchases")
 public class PurchaseController {
-
-    private final Logger log = LoggerFactory.getLogger(PurchaseController.class);
-
     @Autowired
     private PurchaseService purchaseService;
 
-    @GetMapping
-    public List<Purchase> getAllPurchases() {
-        log.info("Getting all purchases");
-        return purchaseService.getAllPurchases();
+    @Autowired
+    private UsersService userService;
+
+    private static final Logger logger = LoggerFactory.getLogger(PurchaseController.class);
+
+
+    @GetMapping("/admin")
+    public ResponseEntity<List<Purchase>> getAdminPurchases() {
+        List<Purchase> purchases = purchaseService.getAllPurchases();
+        return ResponseEntity.ok(purchases);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Purchase> getPurchaseById(@PathVariable Integer id) {
-        log.info("Getting purchase by ID: {}", id);
-        Optional<Purchase> purchase = purchaseService.getPurchaseById(id);
-        return purchase.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity<List<Purchase>> getClientPurchases(@PathVariable Integer clientId) {
+        User client = userService.getUserById(clientId);
+        List<Purchase> purchases = purchaseService.getUserPurchases(client);
+        return ResponseEntity.ok(purchases);
     }
 
-    @PostMapping
-    public ResponseEntity<Purchase> createPurchase(@RequestBody Purchase purchase) {
-        log.info("Creating a new purchase: {}", purchase);
-        Purchase createdPurchase = purchaseService.createPurchase(purchase);
-        log.info("Purchase created: {}", createdPurchase);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPurchase);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Purchase> updatePurchase(@PathVariable Integer id, @RequestBody Purchase updatedPurchase) {
-        log.info("Updating purchase with ID {}: {}", id, updatedPurchase);
-        Purchase purchase = purchaseService.updatePurchase(id, updatedPurchase);
-        if (purchase != null) {
-            log.info("Purchase updated: {}", purchase);
-            return ResponseEntity.ok(purchase);
-        } else {
-            log.info("Purchase with ID {} not found", id);
-            return ResponseEntity.notFound().build();
+    @PostMapping("/admin")
+    public ResponseEntity<Object> createPurchaseByAdmin(@RequestBody Purchase purchase) {
+        try {
+            Purchase savedPurchase = purchaseService.savePurchaseByAdmin(purchase);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedPurchase);
+        } catch (ProductNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found with name: " + purchase.getPurchaseName());
+        } catch (PurchaseSaveException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving the purchase to the database");
+        } catch (Exception e) {
+            // Handle other exceptions
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
         }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePurchase(@PathVariable Integer id) {
-        log.info("Deleting purchase with ID: {}", id);
-        purchaseService.deletePurchase(id);
-        return ResponseEntity.noContent().build();
     }
 }

@@ -78,23 +78,10 @@ public class User implements UserDetails {
     }
 
 
-    public void setPurchases(List<Purchase> purchases) {
-        this.purchases = purchases;
-    }
-
-    public void addPurchase(Purchase purchase) {
-        purchases.add(purchase);
-        purchase.setUser(this);
-    }
-
-    public void removePurchase(Purchase purchase) {
-        purchases.remove(purchase);
-        purchase.setUser(null);
-    }
-
     public void setMontant(Double montant) {
         this.montant = montant;
     }
+
 
 
 }

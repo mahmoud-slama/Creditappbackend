@@ -1,54 +1,58 @@
 package c.example.aibouauth.purchase;
 
 import c.example.aibouauth.product.Product;
+import c.example.aibouauth.product.ProductNotFoundException;
+import c.example.aibouauth.product.ProductRepository;
+import c.example.aibouauth.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 @Service
 public class PurchaseService {
-
     @Autowired
     private PurchaseRepository purchaseRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+
+    private static final Logger log = LoggerFactory.getLogger(PurchaseService.class);
+
+    public List<Purchase> getUserPurchases(User user) {
+        return purchaseRepository.findByUser(user);
+    }
 
     public List<Purchase> getAllPurchases() {
         return purchaseRepository.findAll();
     }
 
-    public Optional<Purchase> getPurchaseById(Integer id) {
-        return purchaseRepository.findById(id);
-    }
+    public Purchase savePurchaseByAdmin(Purchase purchase) {
+        Product product = productRepository.findByName(purchase.getPurchaseName());
 
-    public Purchase createPurchase(Purchase purchase) {
-        // Fetch the product from the purchase
-        Product product = purchase.getProduct();
-
-        // Calculate the amount based on quantity and product price
-        double amount = purchase.getQuantity() * product.getPrice();
-
-        // Set the calculated amount to the purchase object before saving
-        purchase.setAmount(amount);
-
-        // Save the purchase to the repository
-        return purchaseRepository.save(purchase);
-    }
-
-    public Purchase updatePurchase(Integer id, Purchase updatedPurchase) {
-        // Check if the purchase with the given id exists
-        if (purchaseRepository.existsById(id)) {
-            updatedPurchase.setId(id);
-            return purchaseRepository.save(updatedPurchase);
-        } else {
-            // Handle purchase not found scenario
-            return null;
+        if (product == null) {
+            throw new ProductNotFoundException("Product not found with name: " + purchase.getPurchaseName());
         }
-    }
 
-    public void deletePurchase(Integer id) {
-        purchaseRepository.deleteById(id);
-    }
-}
+        BigDecimal amount = product.getPrice().multiply(BigDecimal.valueOf(purchase.getQuantity()));
+
+        purchase.setProduct(product);
+        purchase.setAmount(amount);
+        purchase.setPurchaseDate(LocalDateTime.now());
+
+        try {
+            return purchaseRepository.save(purchase);
+        } catch (Exception e) {
+
+            log.error("Error saving the purchase to the database", e);
+
+
+            throw new RuntimeException("Error saving the purchase to the database", e);
+        }
+    }}

@@ -5,8 +5,9 @@ import c.example.aibouauth.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Data
@@ -21,26 +22,22 @@ public class Purchase {
     @Id
     @GeneratedValue
     private Integer id;
-    private int quantity;
     @Getter
-    private Double amount;
+    private BigDecimal amount;
     @Getter
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-    private LocalDateTime date;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private String purchaseName;
+    private int quantity;
+    private LocalDateTime purchaseDate;
 
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-    @Transient
-    public Integer getUserId() {
-        return user != null ? user.getId() : null;
-    }
 
 }

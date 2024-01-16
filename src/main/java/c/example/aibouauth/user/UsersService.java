@@ -18,7 +18,6 @@ public class UsersService {
 
     private final PasswordEncoder passwordEncoder;
     private  final UserRepository repository;
-    private final PurchaseRepository purchaseRepository;
     public void changePassword(changePasswordRequest request, Principal connectedUser) {
 
         var user = ((User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal());
@@ -39,24 +38,6 @@ public class UsersService {
     }
 
 
-    @Transactional
-    public User addPurchaseToUser(Integer user_id, Purchase purchase) {
-        User user = repository.findById(user_id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        purchase.setUser(user);
-        purchaseRepository.save(purchase);
-
-        return user;
-    }
-    // Method to get all purchases for a user
-    public List<Purchase> getAllPurchasesByUser(Integer userId) {
-        return purchaseRepository.findAllByUser_Id(userId);
-    }
-
-    public List<User> getAllUsers() {
-        return repository.findAll();
-    }
 
     public User getUserById(Integer id) {
         return repository.findUserById(id)
