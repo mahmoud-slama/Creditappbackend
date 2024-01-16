@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private  String email;
     private  String password;
     private String phone;
+    private Double maxAmount;
     @Enumerated(EnumType.STRING)
     private  Role  role;
     @Getter

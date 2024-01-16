@@ -38,6 +38,7 @@ public class ProductController {
                     product.setRef(newProduct.getRef());
                     product.setName(newProduct.getName());
                     product.setPrice(newProduct.getPrice());
+                    product.setImages(newProduct.getImages());
                     product.setQuantity(newProduct.getQuantity());
                return  repository.save(product);
                 }).orElseThrow(()-> new ProductNotFoundException(id));

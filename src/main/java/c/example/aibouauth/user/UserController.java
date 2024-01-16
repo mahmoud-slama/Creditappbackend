@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -24,6 +25,25 @@ public class UserController {
         return  ResponseEntity.ok().build();
     }
 
+    @PutMapping("/user/maxAmount/{id}")
+    public ResponseEntity<UserDto> updateMaxAmount(@RequestBody UserDto updatedUserData, @PathVariable Integer id) {
+        return Optional.ofNullable(service.getUserById(id))
+                .map(existingUser -> {
+                    service.updateMaxAmount(updatedUserData, id);
+                    return ResponseEntity.ok(UserDto.fromEntity(existingUser));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
+
+    @GetMapping("/user/maxAmount/{id}")
+    public ResponseEntity<Double> getMaxAmount(@PathVariable Integer id) {
+        Optional<User> userOptional = Optional.ofNullable(service.getUserById(id));
+
+        return userOptional.map(user -> ResponseEntity.ok(user.getMaxAmount()))
+                .orElse(ResponseEntity.notFound().build());
+    }
 
 
 

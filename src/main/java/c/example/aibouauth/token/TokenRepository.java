@@ -1,6 +1,7 @@
 package c.example.aibouauth.token;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -9,7 +10,7 @@ import java.util.Optional;
 
 public interface TokenRepository extends JpaRepository<Token,Integer> {
 
-     @Query("""
+    @Query("""
         select t from Token t inner join User u on t.user.id = u.id
         where u.id = :userId and   (t.revoked = false or t.expired = false )
 """)
@@ -17,6 +18,11 @@ public interface TokenRepository extends JpaRepository<Token,Integer> {
     List<Token> findAllValidTokenByUser(Integer userId);
 
     Optional<Token> findByToken(String token);
+
+
+    @Modifying
+    @Query("DELETE FROM Token t WHERE t.user.id = :userId")
+    void deleteByUserId(Integer userId);
 
 
 }
