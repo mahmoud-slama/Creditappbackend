@@ -20,7 +20,8 @@ public class Product {
     @Id
     @GeneratedValue
     private Integer id;
-    private String label;
+    private String title;
+    private String images;
     private Integer price;
     private String ref;
     private Integer quantity;

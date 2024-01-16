@@ -19,6 +19,6 @@ public class RegisterRequest {
     private String password;
     private String tel;
     private Double maxAmount;
-    private Double totalAmount=0.00;
+    private Double totalAmount;
     private Role role;
 }

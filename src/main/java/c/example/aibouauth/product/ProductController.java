@@ -33,9 +33,10 @@ public class ProductController {
         return repository.findById(id)
                 .map(product -> {
                     product.setRef(newProduct.getRef());
-                    product.setLabel(newProduct.getLabel());
+                    product.setTitle(newProduct.getTitle());
                     product.setPrice(newProduct.getPrice());
                     product.setQuantity(newProduct.getQuantity());
+                    product.setImages(newProduct.getImages());
                return  repository.save(product);
                 }).orElseThrow(()-> new ProductNotFoundException(id));
     }
