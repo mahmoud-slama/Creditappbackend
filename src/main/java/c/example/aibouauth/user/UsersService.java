@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,9 @@ public class UsersService {
 
 
 
-
+    public List<User> getAllUsers(){
+        return  repository.findAll();
+    }
 
     public User getUserById(Integer id) {
         return repository.findById(id).orElse(null);

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class UserController {
     private final UsersService service;
@@ -37,6 +37,7 @@ public class UserController {
 
 
 
+
     @GetMapping("/user/maxAmount/{id}")
     public ResponseEntity<Double> getMaxAmount(@PathVariable Integer id) {
         Optional<User> userOptional = Optional.ofNullable(service.getUserById(id));
@@ -44,6 +45,7 @@ public class UserController {
         return userOptional.map(user -> ResponseEntity.ok(user.getMaxAmount()))
                 .orElse(ResponseEntity.notFound().build());
     }
+
 
 
 

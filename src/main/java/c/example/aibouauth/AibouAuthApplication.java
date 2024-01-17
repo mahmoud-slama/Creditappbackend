@@ -38,6 +38,8 @@ public class AibouAuthApplication {
 					.email("admin@mail.com")
 					.password("password")
 					.role(ADMIN)
+					.phone("99999999")
+
 					.build();
 
 			// Check if the user with the same email already exists
@@ -53,6 +55,7 @@ public class AibouAuthApplication {
 					.email("manager@mail.com")
 					.password("password")
 					.role(MANAGER)
+					.phone("99999999")
 					.build();
 
 			// Check if the user with the same email already exists

@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,4 +21,6 @@ public class AuthenticationResponse {
     private String refreshToken;
     private String firstName;
     private Role role;
+    private Integer id;
+    private BigDecimal montant;
 }

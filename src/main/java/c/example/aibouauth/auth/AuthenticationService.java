@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +37,8 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .email(request.getEmail())
                 .phone(request.getPhone())
+                .maxAmount(0.00)
+                .montant(BigDecimal.ZERO)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
                 .build();
@@ -48,7 +51,10 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .role(savedUser.getRole())
                 .firstName(savedUser.getFirstName())
+                .montant(savedUser.getMontant())
+                .id(savedUser.getId())
                 .build();
+
     }
 
 
@@ -70,6 +76,8 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .role(user.getRole())
                 .firstName(user.getFirstName())
+                .montant(user.getMontant())
+                .id(user.getId())
                 .build();
     }
 

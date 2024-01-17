@@ -35,14 +35,12 @@ public class User implements UserDetails {
     private Double maxAmount;
     @Enumerated(EnumType.STRING)
     private  Role  role;
-    @Getter
-    @Setter
+
     private BigDecimal montant = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "user")
     private  List<Token>tokens;
 
-    @Getter
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<Purchase> purchases;
