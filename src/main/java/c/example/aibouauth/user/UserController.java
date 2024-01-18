@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,13 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/user/montant/{id}")
+    public ResponseEntity<BigDecimal> getMontant(@PathVariable Integer id) {
+        Optional<User> userOptional = Optional.ofNullable(service.getUserById(id));
+
+        return userOptional.map(user -> ResponseEntity.ok(user.getMontant()))
+                .orElse(ResponseEntity.notFound().build());
+    }
 
 
 
