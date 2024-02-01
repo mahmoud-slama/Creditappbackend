@@ -36,6 +36,11 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private  Role  role;
 
+
+
+    // Ajoutez ces champs à votre entité
+    private String codeConfirmation;
+    private boolean estVerifie;
     private BigDecimal montant = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "user")
@@ -81,7 +86,9 @@ public class User implements UserDetails {
     }
 
 
-
+    public boolean isEstVerifie() {
+        return estVerifie;
+    }
 
 
 

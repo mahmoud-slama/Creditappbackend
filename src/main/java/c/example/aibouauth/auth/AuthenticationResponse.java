@@ -21,6 +21,7 @@ public class AuthenticationResponse {
     private String refreshToken;
     private String firstName;
     private Role role;
+    private String email;
     private Integer id;
     private BigDecimal montant;
 }

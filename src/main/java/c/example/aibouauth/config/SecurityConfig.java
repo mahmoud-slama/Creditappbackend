@@ -57,6 +57,9 @@ public class SecurityConfig {
                                 .requestMatchers("/api/purchases/**").authenticated()
                                 .anyRequest().authenticated()
                 )
+                .oauth2Login(auth2->{
+
+                })
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

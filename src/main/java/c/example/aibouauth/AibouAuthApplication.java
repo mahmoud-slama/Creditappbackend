@@ -39,7 +39,7 @@ public class AibouAuthApplication {
 					.password("password")
 					.role(ADMIN)
 					.phone("99999999")
-
+					.estVerifie(true)
 					.build();
 
 			// Check if the user with the same email already exists
@@ -55,6 +55,8 @@ public class AibouAuthApplication {
 					.email("manager@mail.com")
 					.password("password")
 					.role(MANAGER)
+					.estVerifie(true)
+
 					.phone("99999999")
 					.build();
 
@@ -64,6 +66,9 @@ public class AibouAuthApplication {
 			} else {
 				//System.out.println("User with email 'manager@mail.com' already exists.\n "+ userRepository.findUserByEmail("manager@mail.com").get().getTokens());
 			}
+
+			;
+
 		};
 	}
 }

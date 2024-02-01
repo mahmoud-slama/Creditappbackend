@@ -1,4 +1,3 @@
-
 server:
   error:
     include-message: always
@@ -6,25 +5,46 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3307/credit1
+    url: jdbc:mysql://localhost:3306/mahmoud3
     username: root
-    password: Eniso@23
+    password: SLAMA250@@mahmoud##
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: slama.mahmoud940@gmail.com
+    password: gcia txli noyj cwvd
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   jpa:
     hibernate:
-      ddl-auto: update # Utilisez "update" au lieu de "create-drop"
-
+      ddl-auto: update # Utilize "update" instead of "create-drop"
     show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-
         format_sql: true
     database: mysql
-application :
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 72798972333-lth15q9a66melktb408k7hpqdq0skk4c.apps.googleusercontent.com
+            clientSecret: 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
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - email
+              - profile
+
+application:
   security:
     jwt:
-      secret-key : 3e58950f9b875dddf66b25bd1b846e78c8c2bb923ee8cbd7f72695aefb626be3
-      expiration : 86400000
-      refresh-token :
-        expiration : 604800000
+      secret-key: 3e58950f9b875dddf66b25bd1b846e78c8c2bb923ee8cbd7f72695aefb626be3
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000

@@ -17,14 +17,14 @@ import java.util.Optional;
 public class UserController {
     private final UsersService service;
 
-    @PatchMapping
-    public ResponseEntity<?> changePassword(
-       @RequestBody changePasswordRequest request,
-       Principal connectedUser
-    ){
-        service.changePassword(request,connectedUser);
-        return  ResponseEntity.ok().build();
-    }
+//    @PatchMapping
+//    public ResponseEntity<?> changePassword(
+//       @RequestBody changePasswordRequest request,
+//       Principal connectedUser
+//    ){
+//        service.changePassword(request,connectedUser);
+//        return  ResponseEntity.ok().build();
+//    }
 
     @PutMapping("/user/maxAmount/{id}")
     public ResponseEntity<UserDto> updateMaxAmount(@RequestBody UserDto updatedUserData, @PathVariable Integer id) {
@@ -53,6 +53,11 @@ public class UserController {
 
         return userOptional.map(user -> ResponseEntity.ok(user.getMontant()))
                 .orElse(ResponseEntity.notFound().build());
+    }
+    @PostMapping("/verification")
+    public ResponseEntity<?> verifyAccount(@RequestParam String email, @RequestParam String code) {
+        service.verifyAccount(email, code);
+        return ResponseEntity.ok().build();
     }
 
 

@@ -44,4 +44,18 @@ public class UserDto {
     public static List<UserDto> fromEntityList(List<User> users) {
         return users.stream().map(UserDto::fromEntity).toList();
     }
+
+    public User toEntity() {
+        User user = new User();
+        user.setId(this.id);
+        user.setFirstName(this.firstName);
+        user.setLastName(this.lastName);
+        user.setEmail(this.email);
+        user.setPhone(this.tel); // Assurez-vous que le nom du champ correspond au nom de la propriété dans la classe User
+        user.setMaxAmount(this.maxAmount);
+        user.setMontant(this.montant);
+        user.setRole(this.role);
+        // N'oubliez pas de définir d'autres propriétés de User si nécessaire
+        return user;
+    }
 }
