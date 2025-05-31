@@ -38,7 +38,6 @@ public class UserController {
 
 
 
-
     @GetMapping("/user/maxAmount/{id}")
     public ResponseEntity<Double> getMaxAmount(@PathVariable Integer id) {
         Optional<User> userOptional = Optional.ofNullable(service.getUserById(id));

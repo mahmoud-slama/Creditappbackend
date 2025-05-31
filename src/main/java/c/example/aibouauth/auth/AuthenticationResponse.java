@@ -2,7 +2,6 @@ package c.example.aibouauth.auth;
 
 
 import c.example.aibouauth.user.Role;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

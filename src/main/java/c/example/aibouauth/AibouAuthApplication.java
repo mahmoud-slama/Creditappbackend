@@ -13,7 +13,6 @@ import static c.example.aibouauth.user.Role.ADMIN;
 import static c.example.aibouauth.user.Role.MANAGER;
 
 @SpringBootApplication
-
 @AllArgsConstructor
 public class AibouAuthApplication {
 
