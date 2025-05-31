@@ -1,0 +1,55 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+  port: 8882
+
+spring:
+  datasource:
+
+    url: jdbc:postgresql://postgres:5432/credit-db
+    username: username
+    password: password
+    driver-class-name: org.postgresql.Driver
+  mail:
+    host: mail-dev
+    port: 1025
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+  jpa:
+    hibernate:
+      ddl-auto: update # Utilize "update" instead of "create-drop"
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    database: POSTGRESQL
+#  security:
+#    oauth2:
+#      client:
+#
+#       registration:
+#         google:
+#            clientId: 72798972333-lth15q9a66melktb408k7hpqdq0skk4c.apps.googleusercontent.com
+#            clientSecret: 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
+#            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            scope:
+#              - email
+#             - profile
+
+application:
+  security:
+    jwt:
+      secret-key: 3e58950f9b875dddf66b25bd1b846e78c8c2bb923ee8cbd7f72695aefb626be3
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000

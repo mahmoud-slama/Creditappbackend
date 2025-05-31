@@ -1,0 +1,62 @@
+
+
+services:
+  postgres:
+    container_name: Credit-db-dt
+    image: postgres
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: credit-db
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    #restart: unless-stopped
+    networks:
+      - creditappbackend-main_credit-app
+  mail-dev:
+    container_name: mail-Credit-dt
+    image: maildev/maildev
+    ports:
+      - 1080:1080
+      - 1025:1025
+    networks:
+        - creditappbackend-main_credit-app
+  credit-app-back:
+    container_name: credit-app-back
+    image: marwenchebbi/credit-app-back:1.0.4
+    ports:
+      - 8882:8882
+    depends_on:
+      - postgres
+
+    environment:
+      SPRING_DATASOURCE_URL : jdbc:postgresql://postgres:5432/credit-db
+      SPRING_DATASOURCE_USERNAME: username
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_MAIL_HOST: mail-dev  # Add this
+      SPRING_MAIL_PORT: 1025      # Add this
+    networks:
+      - creditappbackend-main_credit-app
+  credit-app-front:
+    container_name: credit-app-front
+    image: marwenchebbi/credit-app-front:1.0.2
+    ports:
+      - 3000:3000
+    depends_on:
+      - credit-app-back
+    environment:
+      REACT_APP_API_URL: http://localhost:8882
+    networks:
+      - creditappbackend-main_credit-app
+
+
+
+networks:
+  creditappbackend-main_credit-app:
+    driver: bridge
+volumes:
+  postgres:
+    driver: local
